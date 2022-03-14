@@ -5,15 +5,21 @@ export const STARTING_SKILL = 2;
 export const STARTING_SPEED = 10;
 export const STARTING_HEALTH = 20;
 export const CHARACTER_STARTING_COST = 10;
-export interface Stats extends Skills {
+
+export interface Stats {
     speed: number;
     health: number;
-}
-
-export interface Skills {
     shooting: number;
     fighting: number;
     agility: number;
+}
+
+export enum statsWithStartingValue {
+    shooting = STARTING_SKILL,
+    fighting = STARTING_SKILL,
+    agility = STARTING_SKILL,
+    speed = STARTING_SPEED,
+    health = STARTING_HEALTH,
 }
 
 export function Character() {
@@ -23,30 +29,32 @@ export function Character() {
         shooting: STARTING_SKILL,
         fighting: STARTING_SKILL,
         agility: STARTING_SKILL,
-        speed: STARTING_SPEED,
         health: STARTING_HEALTH,
+        speed: STARTING_SPEED,
     });
 
     useEffect(() => {
-        setCost(Object.values(stats).reduce((previousCost, _, index) => {
-            const currentStatValue = Object.values(stats)[index];
+        const statNames = Object.keys(stats);
+        const statValues = Object.values(stats);
+        setCost(statValues.reduce((previousCost, _, index) => {
+            const statName = statNames[index];
+            const currentStatValue = statValues[index];
+            const currentStatStartingValue = statsWithStartingValue[statName as keyof Stats];
             let statCost = 0;
-            if (currentStatValue > 2) {
-                statCost += (currentStatValue - 2) * 10;
+            if (currentStatValue > currentStatStartingValue) {
+                statCost += (currentStatValue - currentStatStartingValue) * 10;
             }
             return previousCost + statCost;
         }, 0));
     }, [stats]);
 
-    console.log(name);
-    console.log(cost);
     return (
         <div className="character">
             <div className="character_header">
                 <span> Name: </span>
                 <input
                     onChange={(event) => setName(event.target.value)}
-                    className="characterName"
+                    className="character_name"
                     value={name}
                 />
                 <span className="character_cost"> cost: {cost} </span>

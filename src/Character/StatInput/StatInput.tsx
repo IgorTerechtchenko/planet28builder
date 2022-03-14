@@ -1,11 +1,7 @@
 import React from 'react';
-import { keys } from 'ts-transformer-keys';
 import {
     Stats,
-    Skills,
-    STARTING_SKILL,
-    STARTING_SPEED,
-    STARTING_HEALTH,
+    statsWithStartingValue,
 } from '../Character';
 
 interface Props {
@@ -29,13 +25,7 @@ export function StatInput({ statName, stats, setStats }: Props) {
                     setStats(newStats);
                 }}
                 value={stats[statName]}
-                min={
-                    isSkill(statName)
-                        ? STARTING_SKILL
-                        : statName === 'health'
-                            ? STARTING_HEALTH
-                            : STARTING_SPEED
-                }
+                min={statsWithStartingValue[statName]}
             />
         </div>
     )
