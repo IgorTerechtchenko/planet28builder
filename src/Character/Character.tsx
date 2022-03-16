@@ -1,26 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { StatInput } from "./StatInput/StatInput";
 
-export const STARTING_SKILL = 2;
-export const STARTING_SPEED = 10;
-export const STARTING_HEALTH = 20;
-export const CHARACTER_STARTING_COST = 10;
-
-export interface Stats {
-    speed: number;
-    health: number;
-    shooting: number;
-    fighting: number;
-    agility: number;
-}
-
-export enum statsWithStartingValue {
-    shooting = STARTING_SKILL,
-    fighting = STARTING_SKILL,
-    agility = STARTING_SKILL,
-    speed = STARTING_SPEED,
-    health = STARTING_HEALTH,
-}
+import {
+    STARTING_SKILL,
+    STARTING_SPEED,
+    STARTING_HEALTH,
+    CHARACTER_STARTING_COST,
+    statsWithStartingValue,
+    Stats,
+} from './index';
+import { Weapon } from "../Common/Weapon";
 
 export function Character() {
     const [name, setName] = useState('');
@@ -32,6 +21,8 @@ export function Character() {
         health: STARTING_HEALTH,
         speed: STARTING_SPEED,
     });
+
+    const [equipment, setEquipment] = useState<Weapon[]>([]);
 
     useEffect(() => {
         const statNames = Object.keys(stats);

@@ -2,7 +2,7 @@ import React from 'react';
 import {
     Stats,
     statsWithStartingValue,
-} from '../Character';
+} from '../index';
 
 interface Props {
     statName: keyof Stats;
