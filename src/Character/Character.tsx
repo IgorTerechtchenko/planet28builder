@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { StatInput } from "./StatInput/StatInput";
+import React, { useState, useEffect } from 'react';
+import { StatInput } from './StatInput/StatInput';
 
 import {
     STARTING_SKILL,
@@ -9,9 +9,22 @@ import {
     statsWithStartingValue,
     Stats,
 } from './index';
-import { Weapon } from "../Common/Weapon";
+import { Weapon } from '../Common/Weapon';
+import { Trait } from '../Common/Trait';
+import { Item } from '../Common/Item';
+import { Items } from './Items/Items';
+import { WeaponItem } from './Items/WeaponItem/WeaponItem';
+import { TraitItem } from './Items/TraitItem/TraitItem';
 
-export function Character() {
+interface Props {
+    availableWeapons: Weapon[];
+    availableTraits: Trait[];
+}
+
+export function Character({
+    availableWeapons,
+    availableTraits,
+}: Props) {
     const [name, setName] = useState('');
     const [cost, setCost] = useState(CHARACTER_STARTING_COST);
     const [stats, setStats] = useState<Stats>({
@@ -22,7 +35,16 @@ export function Character() {
         speed: STARTING_SPEED,
     });
 
-    const [equipment, setEquipment] = useState<Weapon[]>([]);
+    const [weapons, setWeapons] = useState<Weapon[]>([]);
+    const [traits, setTraits] = useState<Trait[]>([]);
+
+    function addItem<ItemType extends Item>(
+        item: ItemType,
+        itemList: ItemType[],
+        setItemList: (value: ItemType[]) => void
+    ) {
+        setItemList([...itemList, item]);
+    }
 
     useEffect(() => {
         const statNames = Object.keys(stats);
@@ -39,30 +61,55 @@ export function Character() {
         }, 0));
     }, [stats]);
 
+    console.log(weapons);
     return (
-        <div className="character">
-            <div className="character_header">
+        <div className='character'>
+            <div className='character_header'>
                 <span> Name: </span>
                 <input
                     onChange={(event) => setName(event.target.value)}
-                    className="character_name"
+                    className='character_name'
                     value={name}
                 />
-                <span className="character_cost"> cost: {cost} </span>
+                <span className='character_cost'> cost: {cost} </span>
             </div>
-            <div className="character_stats">
+            <div className='character_stats'>
                 {Object.keys(stats).map((statName) => {
                     return <StatInput
                         key={statName}
-                        statName={statName as keyof Stats}
+                        statTitle={statName as keyof Stats}
                         statValue={stats[statName as keyof Stats]}
                         stats={stats}
                         setStats={setStats}
                     />;
                 })}
             </div>
-            <div className="traits"></div>
-            <div className="equipment"></div>
+            <Items
+                itemTypeTitle={'Weapons'}
+                availableItems={availableWeapons}
+                addItem={
+                    (item: Weapon) => {
+                        addItem<Weapon>(item, weapons, setWeapons);
+                    }
+                }
+            >
+                {weapons.map((weapon, index) => {
+                    return <WeaponItem weapon={weapon} deleteItem={() => {}} key={weapon.title + index}/>;
+                })}
+            </Items>
+            <Items
+                itemTypeTitle={'Traits'}
+                availableItems={availableTraits}
+                addItem={
+                    (item: Trait) => {
+                        addItem<Trait>(item, traits, setTraits);
+                    }
+                }
+            >
+                {traits.map((trait, index) => {
+                    return <TraitItem trait={trait} deleteItem={() => {}} key={trait.title + index}/>;
+                })}
+            </Items>
         </div>
     )
 }

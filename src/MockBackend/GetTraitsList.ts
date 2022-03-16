@@ -1,4 +1,4 @@
-import { Trait } from "../Common/Trait";
+import { Trait } from '../Common/Trait';
 
 const TRAIT_LIST: Trait[] = [
     {

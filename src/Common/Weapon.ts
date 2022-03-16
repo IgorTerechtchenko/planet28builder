@@ -6,8 +6,8 @@ export enum weaponSizes {
 }
 
 export enum weaponTypes {
-    MELEE = 'melee',
-    RANGED = 'ranged',
+    MELEE = 'Melee',
+    RANGED = 'Ranged',
 }
 
 export interface Weapon extends Item {

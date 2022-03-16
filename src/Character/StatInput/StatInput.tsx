@@ -5,28 +5,30 @@ import {
 } from '../index';
 
 interface Props {
-    statName: keyof Stats;
+    statTitle: keyof Stats;
     statValue: number;
     stats: Stats;
     setStats: (value: Stats) => void;
 }
 
-export function StatInput({ statName, stats, setStats }: Props) {
+export function StatInput({ statTitle, stats, setStats }: Props) {
+    const ROOT_CLASS = 'stat-input';
+
     return (
-        <div>
-            <span> {statName}: </span>
+        <div className={ROOT_CLASS}>
+            <span className={`${ROOT_CLASS}__title`}> {statTitle}: </span>
             <input
                 type='number'
                 onChange={(event) => {
                     const newStats = {
                         ...stats
                     };
-                    newStats[statName] = Number(event.target.value);
+                    newStats[statTitle] = Number(event.target.value);
                     setStats(newStats);
                 }}
-                value={stats[statName]}
-                min={statsWithStartingValue[statName]}
+                value={stats[statTitle]}
+                min={statsWithStartingValue[statTitle]}
             />
         </div>
-    )
+    );
 }

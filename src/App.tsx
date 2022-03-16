@@ -1,12 +1,11 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { Character } from './Character/Character';
+import { Crew } from './Crew/Crew';
 
 function App() {
   return (
-    <div className="App">
-      <Character/>
+    <div className='App'>
+      <Crew />
     </div>
   );
 }
