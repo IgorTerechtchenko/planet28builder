@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import {
     Stats,
     statsWithStartingValue,
@@ -11,13 +12,30 @@ interface Props {
     setStats: (value: Stats) => void;
 }
 
+const StyledStatInput = styled.input`
+    width: 50px;
+`;
+
+const StatBlock = styled.div`
+    margin-left: 20px;
+    background-color: darkgrey;
+    &:first-child {
+        margin-left: initial;
+    }
+`;
+
+const Title = styled.div`
+    text-align: left;
+    padding: 2px;
+`;
+
 export function StatInput({ statTitle, stats, setStats }: Props) {
     const ROOT_CLASS = 'stat-input';
 
     return (
-        <div className={ROOT_CLASS}>
-            <span className={`${ROOT_CLASS}__title`}> {statTitle}: </span>
-            <input
+        <StatBlock className={ROOT_CLASS}>
+            <Title> {statTitle}: </Title>
+            <StyledStatInput
                 type='number'
                 onChange={(event) => {
                     const newStats = {
@@ -29,6 +47,6 @@ export function StatInput({ statTitle, stats, setStats }: Props) {
                 value={stats[statTitle]}
                 min={statsWithStartingValue[statTitle]}
             />
-        </div>
+        </StatBlock>
     );
 }

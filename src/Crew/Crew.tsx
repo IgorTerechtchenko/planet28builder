@@ -14,15 +14,11 @@ export function Crew() {
             setAvailableWeapons(await getWeaponList());
         }
         getWeapons();
-    });
-
-    useEffect(() => {
         async function getTraits() {
             setAvailableTraits(await getTraitsList());
         }
         getTraits();
-    });
-
+    }, []);
 
     return <div>
         <Character

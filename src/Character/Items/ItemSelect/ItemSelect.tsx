@@ -17,7 +17,6 @@ export function ItemSelect<ItemType extends Item>({
             <select
                 className={`${ROOT_CLASS}_input`}
                 onChange={(event) => {
-                    console.log(event.target.value);
                     const item = availableItems.find(
                         (item) => {
                             return item.title === event.target.value;

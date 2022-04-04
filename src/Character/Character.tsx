@@ -1,4 +1,13 @@
 import React, { useState, useEffect } from 'react';
+
+import {
+    CharacterStats,
+    CharacterCard,
+    CharacterHeader,
+    CharacterName,
+    CharacterNameInput,
+    CharacterNameHeader,
+} from './CharacterStyles';
 import { StatInput } from './StatInput/StatInput';
 
 import {
@@ -61,19 +70,20 @@ export function Character({
         }, 0));
     }, [stats]);
 
-    console.log(weapons);
     return (
-        <div className='character'>
-            <div className='character_header'>
-                <span> Name: </span>
-                <input
-                    onChange={(event) => setName(event.target.value)}
-                    className='character_name'
-                    value={name}
-                />
+        <CharacterCard>
+            <CharacterHeader className='character_header'>
+                <CharacterName>
+                    <CharacterNameHeader> Name: </CharacterNameHeader>
+                    <CharacterNameInput
+                        onChange={(event) => setName(event.target.value)}
+                        className='character_name'
+                        value={name}
+                    />
+                </CharacterName>
                 <span className='character_cost'> cost: {cost} </span>
-            </div>
-            <div className='character_stats'>
+            </CharacterHeader>
+            <CharacterStats>
                 {Object.keys(stats).map((statName) => {
                     return <StatInput
                         key={statName}
@@ -83,7 +93,7 @@ export function Character({
                         setStats={setStats}
                     />;
                 })}
-            </div>
+            </CharacterStats>
             <Items
                 itemTypeTitle={'Weapons'}
                 availableItems={availableWeapons}
@@ -110,6 +120,6 @@ export function Character({
                     return <TraitItem trait={trait} deleteItem={() => {}} key={trait.title + index}/>;
                 })}
             </Items>
-        </div>
+        </CharacterCard>
     )
 }
