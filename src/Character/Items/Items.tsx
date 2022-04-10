@@ -30,7 +30,6 @@ export function Items<ItemType extends Item>({
     children,
 }: Props<ItemType>) {
     const ROOT_CLASS = 'items';
-    console.log(children);
     return (
         <ItemsBlock>
             <ItemTypeTitle> {itemTypeTitle} </ItemTypeTitle>

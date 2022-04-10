@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import {
     CharacterStats,
-    CharacterCard,
+    CharacterCardWrapper,
     CharacterHeader,
     CharacterName,
     CharacterNameInput,
@@ -17,22 +17,28 @@ import {
     CHARACTER_STARTING_COST,
     statsWithStartingValue,
     Stats,
+    Character,
 } from './index';
 import { Weapon } from '../Common/Weapon';
 import { Trait } from '../Common/Trait';
-import { Item } from '../Common/Item';
 import { Items } from './Items/Items';
 import { WeaponItem } from './Items/WeaponItem/WeaponItem';
 import { TraitItem } from './Items/TraitItem/TraitItem';
+import { Action } from '../Crew/Crew';
 
 interface Props {
     availableWeapons: Weapon[];
     availableTraits: Trait[];
+    character: Character;
+    index: number;
+    dispatch: React.Dispatch<Action>;
 }
 
-export function Character({
+export function CharacterCard({
     availableWeapons,
     availableTraits,
+    index,
+    dispatch,
 }: Props) {
     const [name, setName] = useState('');
     const [cost, setCost] = useState(CHARACTER_STARTING_COST);
@@ -47,18 +53,10 @@ export function Character({
     const [weapons, setWeapons] = useState<Weapon[]>([]);
     const [traits, setTraits] = useState<Trait[]>([]);
 
-    function addItem<ItemType extends Item>(
-        item: ItemType,
-        itemList: ItemType[],
-        setItemList: (value: ItemType[]) => void
-    ) {
-        setItemList([...itemList, item]);
-    }
-
     useEffect(() => {
         const statNames = Object.keys(stats);
         const statValues = Object.values(stats);
-        setCost(statValues.reduce((previousCost, _, index) => {
+        const statsCost = statValues.reduce((previousCost, _, index) => {
             const statName = statNames[index];
             const currentStatValue = statValues[index];
             const currentStatStartingValue = statsWithStartingValue[statName as keyof Stats];
@@ -67,11 +65,35 @@ export function Character({
                 statCost += (currentStatValue - currentStatStartingValue) * 10;
             }
             return previousCost + statCost;
-        }, 0));
-    }, [stats]);
+        }, 0);
+        const items = [...weapons, ...traits];
+        const itemsCost = items.reduce((previeousCost, _, index) => {
+            return previeousCost + items[index].cost;
+        }, 0);
+
+        setCost(CHARACTER_STARTING_COST + statsCost + itemsCost);
+    }, [stats, weapons, traits]);
+
+    useEffect(() => {
+        const character = {
+            name,
+            cost,
+            stats,
+            weapons,
+            traits,
+        };
+
+        dispatch({
+            type: 'update-crew',
+            payload: {
+                member: character,
+                memberIndex: index,
+            },
+        });
+    }, [name, cost, stats, weapons, traits, index, dispatch]);
 
     return (
-        <CharacterCard>
+        <CharacterCardWrapper>
             <CharacterHeader className='character_header'>
                 <CharacterName>
                     <CharacterNameHeader> Name: </CharacterNameHeader>
@@ -99,7 +121,7 @@ export function Character({
                 availableItems={availableWeapons}
                 addItem={
                     (item: Weapon) => {
-                        addItem<Weapon>(item, weapons, setWeapons);
+                        setWeapons([...weapons, item]);
                     }
                 }
             >
@@ -112,7 +134,7 @@ export function Character({
                 availableItems={availableTraits}
                 addItem={
                     (item: Trait) => {
-                        addItem<Trait>(item, traits, setTraits);
+                        setTraits([...traits, item]);
                     }
                 }
             >
@@ -120,6 +142,6 @@ export function Character({
                     return <TraitItem trait={trait} deleteItem={() => {}} key={trait.title + index}/>;
                 })}
             </Items>
-        </CharacterCard>
+        </CharacterCardWrapper>
     )
 }

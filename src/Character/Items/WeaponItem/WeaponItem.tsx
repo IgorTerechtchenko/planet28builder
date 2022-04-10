@@ -30,7 +30,6 @@ export function WeaponItem({
     },
 }: Props) {
     const ROOT_CLASS = 'weapon';
-    console.log(specialRules);
 
     return (
         <div className={ROOT_CLASS}>

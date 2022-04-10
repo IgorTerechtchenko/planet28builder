@@ -6,7 +6,7 @@ export const CharacterStats = styled.div`
     width: 100%;
 `;
 
-export const CharacterCard = styled.div`
+export const CharacterCardWrapper = styled.div`
     border: 2px solid;
     padding: 10px;
     width: 600px;
